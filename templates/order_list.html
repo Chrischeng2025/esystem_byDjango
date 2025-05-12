@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">订单列表</h1>
+        <div style="margin-bottom:18px" class="clearfix">
+            <div class="mb-3">
+                <input id="btnadd" type="button" value="新建订单" class="btn btn-primary" data-bs-toggle="modal"
+                       data-bs-target="#infoModal">
+            </div>
+            <div class="mb-3" style="float:right;width:200px">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" placeholder="搜索"
+                               value="{{ search_data }}">
+                        <button type="submit" class="btn btn-primary">搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>商品</th>
+                <th>价格</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+                <tr>
+                    <td>{{ obj.order_number }}</td>
+                    <td>{{ obj.product.name }}</td>
+                    <td>{{ obj.price }}</td>
+                    <td>{{ obj.get_status_display }}</td>
+                    <td>
+                        <a href="/order/{{ obj.id }}/edit/" class="btn btn-sm btn-warning">编辑</a>
+                        <a href="/order/{{ obj.id }}/delete/" class="btn btn-sm btn-danger">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 模态框组件 -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">信息详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAdd">
+                        {% for field in form %}
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            <p style="color: red">{{ field.errors.0 }}</p>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button id="btnSave" type="button" class="btn btn-primary" data-bs-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function (){
+            bindBtnSaveEvent();
+        })
+    
+        function bindBtnSaveEvent() {
+            $("#btnSave").click(function (){
+                $.ajax({
+                    url:"/order/add/",
+                    type:"post",
+                    data:$("#formAdd").serialize(),
+                    dataType:"Json",
+                    success:function (res) {
+                        console.log(res);
+                    }
+                })
+            });
+        }
+    </script>
+{% endblock %}

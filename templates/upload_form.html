@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ title }}</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                {% for field in form %}
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    <p style="color: red">{{ field.errors.0 }}</p>
+                {% endfor %}
+            </div>
+                <input type="submit" value="upload" class="btn btn-primary">
+        </form>
+    </div>
+
+{% endblock %}

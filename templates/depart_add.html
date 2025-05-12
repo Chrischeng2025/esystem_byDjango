@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">添加部门</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="departmentName" class="form-label">部门名称</label>
+                <input type="text" class="form-control" id="departmentName" name="departmentName" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+
+{% endblock %}

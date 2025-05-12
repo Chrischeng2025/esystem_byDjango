@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">部门列表</h1>
+
+        <!-- 新建部门按钮 -->
+        <a href="/depart/add/" class="btn btn-primary mb-3">新建部门</a>
+        <div class="panel-heading">
+            <span class="glyphicon glyphoicon-th-list" aria-hidden="true"></span>
+            批量上传
+        </div>
+        <div class="panel-body">
+            <form method="post" enctype="multipart/form-data" action="/depart/multi/">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="file" name="file">
+                </div>
+                <input type="submit" value="upload" class="btn btn-primary">
+            </form>
+        </div>
+        <!-- 部门列表表格 -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>部门ID</th>
+                <th>部门名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 这里应该使用后端数据循环生成实际的部门列表 -->
+            {% for obj in queryset %}
+                <tr>
+                    <td>{{ obj.id }}</td>
+                    <td>{{ obj.title }}</td>
+                    <td>
+                        <a href="/depart/{{ obj.id }}/edit/" class="btn btn-sm btn-warning">编辑</a>
+                        <a href="/depart/delete/?nid={{ obj.id }}" class="btn btn-sm btn-danger">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <!-- 更多部门... -->
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
